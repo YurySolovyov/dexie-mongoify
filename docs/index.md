@@ -1,19 +1,13 @@
 #### API:
 
-[Query API]()
+[Query API](/docs/query-api.md)
 
-[Update API]()
+[Update API](/docs/update-api.md)
 
-[Count API]()
+[Count API](/docs/count-api.md)
 
-[Remove API]()
+[Remove API](docs/remove-api.md)
 
-[Drop API]()
+[Drop API](/docs/count-api.md)
 
-[Top-level API]()
-
-#### Operators:
-
-[Supported query operators]()
-
-[Supported update operators]()
+[Top-level API](docs/top-api.md)
