@@ -7,7 +7,7 @@ Mongoify tries to provide MongoDB-like* query language and API, but uses promise
 `*` MongoDB-like means that Mongoify tries to follow MongoDB where it makes sense, to simplify API and implementation.
 You are welcome to send PR that increases MongoDB compatibility.
 
-API documentation.
+[API documentation](/docs/index.md)
 
 #### Examples:
 
