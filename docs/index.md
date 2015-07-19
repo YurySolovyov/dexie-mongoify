@@ -6,7 +6,7 @@
 
 [Count API](/docs/count-api.md)
 
-[Remove API](docs/remove-api.md)
+[Remove API](/docs/remove-api.md)
 
 [Drop API](/docs/count-api.md)
 
