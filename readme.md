@@ -91,7 +91,7 @@ db.collection('people').findOne({ skills: { $in: ['html', 'javascript'] }  }, up
 
 ```
 
-[And more]()
+[And more](/docs/index.md)
 
 
 License: MIT
