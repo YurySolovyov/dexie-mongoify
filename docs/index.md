@@ -10,4 +10,4 @@
 
 [Drop API](/docs/count-api.md)
 
-[Top-level API](docs/top-api.md)
+[Top-level API](/docs/top-api.md)
