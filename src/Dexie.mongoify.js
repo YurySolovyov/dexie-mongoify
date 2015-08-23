@@ -1,5 +1,4 @@
-(function(utils) {
-
+(function(publish, utils) {
     var comparsionQueryOperatorsImpl = {
 
         $eq: function(key, value) {
@@ -660,50 +659,63 @@
         return collection.modify(updater);
     };
 
-    Dexie.addons.push(function(db) {
+    publish(function(Dexie) {
+        Dexie.addons.push(function(db) {
 
-        Dexie.prototype.collection = function collection(collectionName) {
-            return db.table(collectionName);
-        };
+            Dexie.prototype.collection = function collection(collectionName) {
+                return db.table(collectionName);
+            };
 
-        db.Table.prototype.count = function count(query) {
-            var emptyQuery = utils.isEmptyValue(query);
-            var collection = emptyQuery ? this.toCollection() : this.find(query);
-            return collection.count();
-        };
+            db.Table.prototype.count = function count(query) {
+                var emptyQuery = utils.isEmptyValue(query);
+                var collection = emptyQuery ? this.toCollection() : this.find(query);
+                return collection.count();
+            };
 
-        db.Table.prototype.find = function find(query) {
-            if (utils.isEmptyValue(query)) { return this.toCollection(); }
-            var executionPlan = chooseExecutuionPlan(query, this.schema);
-            return executionPlan.execute(query, executionPlan.queryAnalysis, this);
-        };
+            db.Table.prototype.find = function find(query) {
+                if (utils.isEmptyValue(query)) { return this.toCollection(); }
+                var executionPlan = chooseExecutuionPlan(query, this.schema);
+                return executionPlan.execute(query, executionPlan.queryAnalysis, this);
+            };
 
-        db.Table.prototype.findOne = function findOne(query) {
-            return this.find(query).first();
-        };
+            db.Table.prototype.findOne = function findOne(query) {
+                return this.find(query).first();
+            };
 
-        db.Table.prototype.insert = function insert(item) {
-            return this.add(item);
-        };
+            db.Table.prototype.insert = function insert(item) {
+                return this.add(item);
+            };
 
-        db.Table.prototype.remove = function remove(query) {
-            return this.find(query).delete();
-        };
+            db.Table.prototype.remove = function remove(query) {
+                return this.find(query).delete();
+            };
 
-        db.Table.prototype.drop = function drop() {
-            return this.toCollection().delete();
-        };
+            db.Table.prototype.drop = function drop() {
+                return this.toCollection().delete();
+            };
 
-        db.WriteableTable.prototype.update = function update(query, update) {
-            var emptyQuery = utils.isEmptyValue(query);
-            var collection = emptyQuery ? this.toCollection() : this.find(query);
-            return performCollectionUpdate(collection, update);
-        };
+            db.WriteableTable.prototype.update = function update(query, update) {
+                var emptyQuery = utils.isEmptyValue(query);
+                var collection = emptyQuery ? this.toCollection() : this.find(query);
+                return performCollectionUpdate(collection, update);
+            };
+        });
 
     });
 
-})({
-
+})(function(installCallback) {
+    if (typeof define === 'function' && define.amd) {
+        define(['Dexie'], function(Dexie) {
+            installCallback(Dexie);
+        });
+    } else if (typeof global !== 'undefined' && typeof module !== 'undefined' && module.exports) {
+        module.exports = function(Dexie) {
+            installCallback(Dexie);
+        };
+    } else {
+        installCallback(Dexie);
+    }
+}, {
     isEmptyValue: function(value) {
         var isObj = typeof value === 'object' && value !== null;
         var isFalsy = !(isObj && value);
