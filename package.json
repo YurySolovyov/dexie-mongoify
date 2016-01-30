@@ -12,6 +12,7 @@
 
   "scripts": {
     "test": "node_modules/.bin/karma start karma-test.conf.js --single-run --browsers Chrome",
+    "test:debug": "node_modules/.bin/karma start karma-test.conf.js --browsers Chrome",
     "bench": "node_modules/.bin/karma start karma-bench.conf.js --single-run --browsers Chrome",
     "bench:debug": "node_modules/.bin/karma start karma-bench.conf.js --browsers Chrome"
   },

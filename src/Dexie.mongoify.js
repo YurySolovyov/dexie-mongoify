@@ -1,4 +1,7 @@
 (function(publish, utils) {
+
+    var DexieRoot;
+
     var comparsionQueryOperatorsImpl = {
 
         $eq: function(key, value) {
@@ -293,6 +296,9 @@
         update: Object.keys(updateOperatorsImpl)
     };
 
+    var supportedUpdateOptions = ['upsert'];
+    var supportedUpsertOperators = ['$set', '$addToSet', '$push'];
+
     var getMatcherSets = function(operator) {
         return Object.keys(operator).map(function(operatorKey) {
             return getQueryValueMatchers(operatorKey, operator[operatorKey]);
@@ -336,6 +342,34 @@
                 iteratorCallback(key, item);
             });
         };
+    };
+
+    var createObjectForUpsert = function(query, update) {
+        var plainQueryKeys = Object.keys(query).filter(function(key) {
+            var hasPlainOperatorKey = comparsionQueryOperatorsImpl.hasOwnProperty(key);
+            var hasLogicalOperatorKey = logicalQueryOperatorsImpl.hasOwnProperty(key);
+            return !(hasPlainOperatorKey || hasLogicalOperatorKey);
+        });
+
+        var objectFromQuery = plainQueryKeys.reduce(function(obj, key) {
+            obj[key] = query[key];
+            return obj;
+        }, {});
+
+        var objectFromUpdate = supportedUpsertOperators.reduce(function(obj, operatorKey) {
+            var updateItem = update[operatorKey];
+            if (updateItem) {
+                Object.keys(updateItem).forEach(function(updateKey) {
+                    obj[updateKey] = updateItem[updateKey];
+                });
+            }
+            return obj;
+        }, {});
+
+        return Object.keys(objectFromUpdate).reduce(function(obj, key) {
+            obj[key] = objectFromUpdate[key];
+            return obj;
+        }, objectFromQuery);
     };
 
     var chooseIndex = function(query, queryAnalysis) {
@@ -494,6 +528,20 @@
 
     };
 
+    var createUpsertModifier = function(table, query, update) {
+        return new DexieRoot.Promise(function(resolve, reject) {
+            table.update(query, update).then(function(count) {
+                if (count === 0) {
+                    var newItem = createObjectForUpsert(query, update);
+                    return table.insert(newItem).then(function() {
+                        resolve(1);
+                    });
+                }
+                resolve(count);
+            }).catch(reject);
+        });
+    };
+
     var getOperatorImplementation = function(operator) {
 
         var operatorsImpl;
@@ -633,6 +681,19 @@
         };
     };
 
+    var analyseUpdateOptions = function(options) {
+        if (utils.isEmptyValue(options)) {
+            return {};
+        }
+
+        return supportedUpdateOptions.reduce(function(obj, key) {
+            if (options.hasOwnProperty(key)) {
+                obj[key] = options[key];
+            }
+            return obj;
+        }, {});
+    };
+
     var chooseExecutuionPlan = function(query, schema) {
 
         var queryAnalysis = analyseQuery(query, schema);
@@ -650,19 +711,22 @@
             queryAnalysis: queryAnalysis,
             execute: executionPlans[plan]
         };
-
     };
 
-    var performCollectionUpdate = function(collection, update) {
+    var performCollectionUpdate = function(table, query, update, options) {
         var updateAnalysis = analyseUpdates(update);
         var updater = createCollectionUpdater(update, updateAnalysis);
-        return collection.modify(updater);
+        if (options.upsert === true) {
+            return createUpsertModifier(table, query, update);
+        }
+        return table.find(query).modify(updater);
     };
 
     publish(function(Dexie) {
-        Dexie.addons.push(function(db) {
+        DexieRoot = Dexie;
+        DexieRoot.addons.push(function(db) {
 
-            Dexie.prototype.collection = function collection(collectionName) {
+            DexieRoot.prototype.collection = function collection(collectionName) {
                 return db.table(collectionName);
             };
 
@@ -694,10 +758,9 @@
                 return this.toCollection().delete();
             };
 
-            db.WriteableTable.prototype.update = function update(query, update) {
-                var emptyQuery = utils.isEmptyValue(query);
-                var collection = emptyQuery ? this.toCollection() : this.find(query);
-                return performCollectionUpdate(collection, update);
+            db.WriteableTable.prototype.update = function update(query, update, options) {
+                var processedOptions = analyseUpdateOptions(options);
+                return performCollectionUpdate(this, query, update, processedOptions);
             };
         });
 

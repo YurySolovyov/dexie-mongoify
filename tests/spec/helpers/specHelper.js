@@ -1,7 +1,4 @@
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 100;
-
 var specHelper = {
-
     getPeople: function() {
         return [
             { firstname: 'John', lastname: 'Doe', age: 24 },
