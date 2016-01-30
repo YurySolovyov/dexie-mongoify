@@ -1,4 +1,4 @@
-## Mongoify
+## Mongoify ![Codeship CI status](https://codeship.com/projects/cce4f940-a96b-0133-ca36-7a8c162db443/status?branch=master)
 
 Mongoify is an addon for [Dexie.js](https://github.com/dfahlander/Dexie.js), IndexedDB wrapper.
 
