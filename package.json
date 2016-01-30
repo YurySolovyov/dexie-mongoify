@@ -1,0 +1,40 @@
+{
+  "name": "Dexie-mongoify",
+  "version": "1.1.0",
+  "description": "Dexie.js plugin with MongoDB-like API",
+  "author": {
+    "name": "Yuri Solovyov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YuriSolovyov/Dexie-mongoify"
+  },
+
+  "scripts": {
+    "test": "node_modules/.bin/karma start karma-test.conf.js --single-run --browsers Chrome",
+    "bench": "node_modules/.bin/karma start karma-bench.conf.js --single-run --browsers Chrome",
+    "bench:debug": "node_modules/.bin/karma start karma-bench.conf.js --browsers Chrome"
+  },
+  "keywords": [
+    "mongo",
+    "indexeddb",
+    "dexie"
+  ],
+
+  "engines": {
+    "node": ">=4.2 <5.0"
+  },
+
+  "devDependencies": {
+    "jasmine-core": "^2.3.4",
+    "benchmark": "^2.1.0",
+    "karma": "^0.13.19",
+    "karma-jasmine": "^0.3.6",
+    "karma-jasmine-matchers": "^0.1.3",
+    "karma-mocha-reporter": "^1.1.5",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-benchmark": "git+https://github.com/lazd/karma-benchmark.git",
+    "karma-benchmark-reporter": "git+https://github.com/lazd/karma-benchmark-reporter.git"
+  },
+  "license": "MIT"
+}
