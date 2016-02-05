@@ -16,5 +16,5 @@ afterAll(function(done) {
 });
 
 Dexie.Promise.on('error', function(e) {
-    console.log(e);
+    console.log(e.stack);
 });
