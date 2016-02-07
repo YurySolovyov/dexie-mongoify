@@ -12,7 +12,7 @@ var onComplete = function() {
 };
 
 var benchmarkOptions = {
-  defer: true,
+  async: true,
   onStart: onStart,
   onComplete: onComplete
 };
