@@ -722,6 +722,12 @@
         return table.find(query).modify(updater);
     };
 
+    var performFind = function(table, query) {
+        if (utils.isEmptyValue(query)) { return table.toCollection(); }
+        var executionPlan = chooseExecutuionPlan(query, table.schema);
+        return executionPlan.execute(query, executionPlan.queryAnalysis, table);
+    };
+
     publish(function(Dexie) {
         DexieRoot = Dexie;
         DexieRoot.addons.push(function(db) {
@@ -732,18 +738,16 @@
 
             db.Table.prototype.count = function count(query) {
                 var emptyQuery = utils.isEmptyValue(query);
-                var collection = emptyQuery ? this.toCollection() : this.find(query);
+                var collection = emptyQuery ? this.toCollection() : performFind(this, query);
                 return collection.count();
             };
 
             db.Table.prototype.find = function find(query) {
-                if (utils.isEmptyValue(query)) { return this.toCollection(); }
-                var executionPlan = chooseExecutuionPlan(query, this.schema);
-                return executionPlan.execute(query, executionPlan.queryAnalysis, this);
+                return performFind(this, query);
             };
 
             db.Table.prototype.findOne = function findOne(query) {
-                return this.find(query).first();
+                return performFind(this, query).first();
             };
 
             db.Table.prototype.insert = function insert(item) {
@@ -751,7 +755,7 @@
             };
 
             db.Table.prototype.remove = function remove(query) {
-                return this.find(query).delete();
+                return performFind(this, query).delete();
             };
 
             db.Table.prototype.drop = function drop() {
