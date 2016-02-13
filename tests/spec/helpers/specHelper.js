@@ -34,5 +34,15 @@ var specHelper = {
 
     dropDatabase: function(db, done) {
         db.delete().then(done);
+    },
+
+    updateResultInterface: {
+        result: {
+            ok: Number,
+            nModified: Number
+        },
+        modifiedCount: Number,
+        upsertedCount: Number,
+        upsertedId: Number,
     }
 };

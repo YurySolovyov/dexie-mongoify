@@ -9,9 +9,9 @@ describe('update operators', function() {
             var newAge = ++originalAge;
 
             var updates = { $inc: { age: 1 } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne({
                     firstname: person.firstname,
                     lastname: person.lastname
@@ -38,9 +38,9 @@ describe('update operators', function() {
             var newAge = originalAge * 2;
 
             var updates = { $mul: { age: 2 } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne({
                     firstname: person.firstname,
                     lastname: person.lastname
@@ -64,9 +64,9 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $rename: { age: 'yearsOld' } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne({
                     firstname: person.firstname,
                     lastname: person.lastname
@@ -90,9 +90,9 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { age: 29 } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne({
                     firstname: person.firstname,
                     lastname: person.lastname
@@ -115,9 +115,9 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $unset: { age: '' } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne({
                     firstname: person.firstname,
                     lastname: person.lastname
@@ -140,9 +140,9 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $min: { age: 11 } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne({
                     firstname: person.firstname,
                     lastname: person.lastname
@@ -165,9 +165,9 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $max: { age: 30 } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne({
                     firstname: person.firstname,
                     lastname: person.lastname
@@ -190,14 +190,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $addToSet: { skills: 'css' } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $addToSet: { skills: 'css' } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -214,14 +214,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $addToSet: { skills: 'css' } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $addToSet: { skills: 'html' } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -237,14 +237,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $addToSet: { skills: 'css' } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $addToSet: { skills: 'css' } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -265,14 +265,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { skills: ['css', 'html'] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $pop: { skills: 1 } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -290,14 +290,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { skills: ['css', 'html'] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $pop: { skills: -1 } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -319,9 +319,9 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $push: { skills: 'css' } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -338,14 +338,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { skills: ['css'] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $push: { skills: 'html' } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -367,14 +367,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { skills: ['css', 'html', 'ruby'] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $pullAll: { skills: ['css', 'ruby'] } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -395,14 +395,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { skills: ['css', 'html'] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $pull: { skills: 'css' } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -418,14 +418,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { skills: ['css', 'html', 'ruby'] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $pull: { skills: { $in: ['css', 'ruby'] } } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -446,14 +446,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { scores: [2, 1, 33, 11, 0, 2, 9] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $slice: { scores: 3 } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -465,20 +465,41 @@ describe('update operators', function() {
 
         });
 
-        // TODO: add neg case
+        it('should slice last n elements by $slice key', function(done) {
+            var person = specHelper.getRandomPerson();
+
+            var updates = { $set: { scores: [2, 1, 33, 11, 0, 2, 9] } };
+            db.collection('people').update(person, updates).then(function(result) {
+
+                expect(result.modifiedCount).toBe(1);
+                return db.collection('people').update(person, { $slice: { scores: -3 } });
+
+            }).then(function(result) {
+
+                expect(result.modifiedCount).toBe(1);
+                return db.collection('people').findOne(person);
+
+            }).then(function(updatedPerson) {
+
+                expect(updatedPerson.scores).toEqual([0, 2, 9]);
+                done();
+
+            });
+
+        });
 
         it('should slice by multiple keys', function(done) {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { scores: [{ ids: [2, 1, 33], points: [0, 2, 9] }] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $slice: { scores: { ids: 1, points: 1 } } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -498,14 +519,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { scores: [2, 1, 33, 11, 0, 2, 9] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $sort: { scores: 1 } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -521,14 +542,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { scores: [2, 1, 33, 11, 0, 2, 9] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $sort: { scores: -1 } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {
@@ -544,14 +565,14 @@ describe('update operators', function() {
             var person = specHelper.getRandomPerson();
 
             var updates = { $set: { scores: [{id:1, n:3}, {id:2, n:0}, {id:3, n:2}] } };
-            db.collection('people').update(person, updates).then(function(updatesCount) {
+            db.collection('people').update(person, updates).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').update(person, { $sort: { scores: { n: 1 } } });
 
-            }).then(function(updatesCount) {
+            }).then(function(result) {
 
-                expect(updatesCount).toBe(1);
+                expect(result.modifiedCount).toBe(1);
                 return db.collection('people').findOne(person);
 
             }).then(function(updatedPerson) {

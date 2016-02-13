@@ -528,17 +528,71 @@
 
     };
 
+    var createInsertResult = function(insertedCount, options) {
+        return {
+            insertedCount: 1,
+            insertedId: options.id,
+            ops: [options.item],
+            result: {
+                ok: 1,
+                n: 1
+            }
+        };
+    };
+
+    var createUpdateResult = function(updateCount, options) {
+        var isUpsert = options && options.isUpsert === true;
+        var modified = isUpsert ? 0 : updateCount;
+        var upserted = isUpsert ? 1 : 0;
+        return {
+            result: {
+                ok: 1,
+                // nScanned: 0, TODO: Can we add this?
+                nModified: modified
+            },
+            // matchedCount: 0, TODO: Can we add this?
+            modifiedCount: modified,
+            upsertedCount: upserted,
+            upsertedId: isUpsert ? options.id : null
+        };
+    };
+
+    var createDeleteResult = function(deletedCount) {
+        return {
+            result: {
+                ok: 1,
+                n: deletedCount
+            },
+
+            deletedCount: deletedCount
+        };
+    };
+
     var createUpsertModifier = function(table, query, update) {
         return new DexieRoot.Promise(function(resolve, reject) {
-            table.update(query, update).then(function(count) {
-                if (count === 0) {
+            table.update(query, update).then(function(result) {
+                if (result.modifiedCount === 0) {
                     var newItem = createObjectForUpsert(query, update);
-                    return table.insert(newItem).then(function() {
-                        resolve(1);
-                    });
+                    return table.insert(newItem);
                 }
-                resolve(count);
+                resolve(result);
+            }).then(function(result) {
+                if (typeof result.insertedId === 'number') {
+                    var updateResult = createUpdateResult(1, {
+                        isUpsert: true,
+                        id: result.insertedId
+                    });
+                    resolve(updateResult);
+                }
             }).catch(reject);
+        });
+    };
+
+    var createPlainModifier = function(table, query, update) {
+        var updateAnalysis = analyseUpdates(update);
+        var updater = createCollectionUpdater(update, updateAnalysis);
+        return table.find(query).modify(updater).then(function(updatesCount) {
+            return createUpdateResult(updatesCount, null);
         });
     };
 
@@ -714,18 +768,38 @@
     };
 
     var performCollectionUpdate = function(table, query, update, options) {
-        var updateAnalysis = analyseUpdates(update);
-        var updater = createCollectionUpdater(update, updateAnalysis);
-        if (options.upsert === true) {
-            return createUpsertModifier(table, query, update);
-        }
-        return table.find(query).modify(updater);
+        var updateModifier = options.upsert === true ? createUpsertModifier : createPlainModifier;
+        return updateModifier(table, query, update);
     };
 
     var performFind = function(table, query) {
         if (utils.isEmptyValue(query)) { return table.toCollection(); }
         var executionPlan = chooseExecutuionPlan(query, table.schema);
         return executionPlan.execute(query, executionPlan.queryAnalysis, table);
+    };
+
+    var performInsert = function(table, item) {
+        var idKey = table.schema.primKey.keyPath;
+        return table.add(item).then(function(id) {
+            var newObj = Object.keys(item).reduce(function(obj, key) {
+                obj[key] = item[key];
+                return obj;
+            }, {});
+            newObj[idKey] = id;
+
+            return createInsertResult(1, {
+                item: item,
+                id: id
+            });
+        });
+    };
+
+    var performRemove = function(table, query) {
+        return performFind(table, query).delete().then(createDeleteResult);
+    };
+
+    var performDrop = function(table) {
+        return table.toCollection().delete().then(createDeleteResult);
     };
 
     publish(function(Dexie) {
@@ -751,15 +825,15 @@
             };
 
             db.Table.prototype.insert = function insert(item) {
-                return this.add(item);
+                return performInsert(this, item);
             };
 
             db.Table.prototype.remove = function remove(query) {
-                return performFind(this, query).delete();
+                return performRemove(this, query);
             };
 
             db.Table.prototype.drop = function drop() {
-                return this.toCollection().delete();
+                return performDrop(this);
             };
 
             db.WriteableTable.prototype.update = function update(query, update, options) {
