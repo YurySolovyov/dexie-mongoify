@@ -50,7 +50,7 @@ Get objects by simple field match:
 
 ```javascript
 
-db.collection('people').find({ age: 30 }).then(function(people) {
+db.collection('people').find({ age: 30 }).toArray().then(function(people) {
     // people 30 years old
 });
 
