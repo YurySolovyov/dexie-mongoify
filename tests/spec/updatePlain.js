@@ -3,9 +3,10 @@ describe('updating', function() {
     it('should update one document', function(done) {
 
         var person = specHelper.getRandomPerson();
-        db.collection('people').update(person, { age: 100 }).then(function(updatesCount) {
+        db.collection('people').update(person, { age: 100 }).then(function(result) {
 
-            expect(updatesCount).toBe(1);
+            expect(result).toImplement(specHelper.updateResultInterface);
+            expect(result.modifiedCount).toBe(1);
             person.age = 100;
             return db.collection('people').findOne(person);
 
@@ -20,9 +21,9 @@ describe('updating', function() {
 
     it('should update multiple documents', function(done) {
 
-        db.collection('people').update({ lastname: 'Doe' }, { age: 45 }).then(function(updatesCount) {
+        db.collection('people').update({ lastname: 'Doe' }, { age: 45 }).then(function(result) {
 
-            expect(updatesCount).toBe(2);
+            expect(result.modifiedCount).toBe(2);
             return db.collection('people').find({ lastname: 'Doe' }).toArray();
 
         }).then(function(updatedPeople) {
@@ -40,9 +41,9 @@ describe('updating', function() {
 
     it('should update all documents on empty query', function(done) {
 
-        db.collection('people').update({}, { age: 20 }).then(function(updatesCount) {
+        db.collection('people').update({}, { age: 20 }).then(function(result) {
 
-            expect(updatesCount).toBe(4);
+            expect(result.modifiedCount).toBe(4);
             return db.collection('people').find({}).toArray();
 
         }).then(function(updatedPeople) {

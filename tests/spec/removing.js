@@ -3,9 +3,12 @@ describe('removing', function() {
     it('should remove a document', function(done) {
 
         var person = specHelper.getRandomPerson();
-        db.collection('people').remove(person).then(function(removedCount) {
+        db.collection('people').remove(person).then(function(result) {
 
-            expect(removedCount).toBe(1);
+            expect(result).toBeObject();
+            expect(result.deletedCount).toBe(1);
+            expect(result.result).toBeObject();
+
             return db.collection('people').find({}).toArray();
 
         }).then(function(people) {
