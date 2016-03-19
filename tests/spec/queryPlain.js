@@ -48,7 +48,10 @@ describe('simple match querying', function() {
 
         }).then(function(result) {
 
-            expect(result).toImplement(person);
+            expect(result.firstname).toBe('Jack');
+            expect(result.lastname).toBe('Sparrow');
+            expect(result.post).toBe('Capitan');
+            expect(result.id).toBeNumber();
             done();
 
         });

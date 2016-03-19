@@ -19,7 +19,8 @@ describe('update operators', function() {
 
             }).then(function(updatedPerson) {
 
-                expect(updatedPerson).toImplement(person);
+                expect(updatedPerson.firstname).toBe(person.firstname);
+                expect(updatedPerson.lastname).toBe(person.lastname);
                 expect(updatedPerson.age).toBe(newAge);
                 done();
 
@@ -48,7 +49,8 @@ describe('update operators', function() {
 
             }).then(function(updatedPerson) {
 
-                expect(updatedPerson).toImplement(person);
+                expect(updatedPerson.firstname).toBe(person.firstname);
+                expect(updatedPerson.lastname).toBe(person.lastname);
                 expect(updatedPerson.age).toBe(newAge);
                 done();
 
