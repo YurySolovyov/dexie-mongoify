@@ -13,6 +13,7 @@
   },
 
   "scripts": {
+    "lint": "eslint src",
     "test": "node_modules/.bin/karma start karma-test.conf.js --single-run --browsers Chrome",
     "test:debug": "node_modules/.bin/karma start karma-test.conf.js --browsers Chrome",
     "build": "webpack -p",
@@ -40,6 +41,7 @@
 
   "devDependencies": {
     "webpack": "^1.12.14",
+    "eslint": "^2.4.0",
     "jasmine-core": "^2.4.1",
     "benchmark": "^2.1.0",
     "karma": "^0.13.19",

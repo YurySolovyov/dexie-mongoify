@@ -143,7 +143,7 @@ var updateOperatorsImpl = {
             if (has(item, key)) {
                 item[key] += increments[key];
             }
-        })
+        });
     },
 
     $mul: function(_null, muls) {
@@ -285,8 +285,8 @@ var updateOperatorsImpl = {
                     var direction = sortValue[sortingValueKey];
                     return res.sort(function(prev, next) {
                         var prevValue = prev[sortingValueKey];
-                        var nextValue = next[sortingValueKey]
-                        return utils.valueComparator(prevValue, nextValue, direction)
+                        var nextValue = next[sortingValueKey];
+                        return utils.valueComparator(prevValue, nextValue, direction);
                     });
                 }, item[key]);
             }
@@ -320,8 +320,8 @@ var getQueryValueMatchers = function(itemKey, queryOperators) {
     });
 };
 
-var createPlainPropertyMatcher = function(query, keys) {
-    keys = keys || Object.keys(query);
+var createPlainPropertyMatcher = function(query, objectKeys) {
+    var keys = objectKeys || Object.keys(query);
     return function(item) {
         return keys.every(function(key) {
             return has(item, key) && item[key] === query[key];
@@ -329,8 +329,8 @@ var createPlainPropertyMatcher = function(query, keys) {
     };
 };
 
-var createPlainPropertyUpdater = function(update, keys) {
-    keys = keys || Object.keys(update);
+var createPlainPropertyUpdater = function(update, objectKeys) {
+    var keys = objectKeys || Object.keys(update);
     return function(item) {
         keys.forEach(function(key) {
             if (has(item, key)) {
@@ -608,7 +608,7 @@ var getOperators = function(objectKind, keys, reducerMaker) {
     });
 };
 
-var createQueryOperatorsReducer = function(query, keys) {
+var createQueryOperatorsReducer = function(query) {
     return function(operatorsKinds, queryKey) {
         var queryValue = query[queryKey];
         var plainValue = utils.isPlainValue(queryValue);
@@ -650,7 +650,7 @@ var createQueryOperatorsReducer = function(query, keys) {
     };
 };
 
-var createUpdateOperatorsReducer = function(update, keys) {
+var createUpdateOperatorsReducer = function(update) {
     return function(updateKinds, updateKey) {
         var updateValue = update[updateKey];
         var plainValue = utils.isPlainValue(updateValue);
@@ -742,7 +742,7 @@ var chooseExecutuionPlan = function(query, schema) {
     var plan;
     if (queryAnalysis.primaryKey.key) {
         plan = 'primaryKey';
-    } else if(queryAnalysis.indexedKeys.length > 0) {
+    } else if (queryAnalysis.indexedKeys.length > 0) {
         plan = 'indexedProp';
     } else {
         plan = 'fullScan';
@@ -786,9 +786,9 @@ var performDrop = function(table) {
     return table.toCollection().delete().then(createDeleteResult);
 };
 
-Dexie.addons.push(function(db) {
+dexie.addons.push(function(db) {
 
-    Dexie.prototype.collection = function collection(collectionName) {
+    dexie.prototype.collection = function collection(collectionName) {
         return db.table(collectionName);
     };
 
