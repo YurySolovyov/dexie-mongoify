@@ -10,8 +10,8 @@ module.exports = function(config) {
         ],
 
         files: [
-          'src/*.js',
-          'tests/spec/**/*.js'
+            'dist/*.js',
+            'tests/spec/**/*.js'
         ],
 
         port: 9876,

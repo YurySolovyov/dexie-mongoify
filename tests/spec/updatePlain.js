@@ -5,14 +5,16 @@ describe('updating', function() {
         var person = specHelper.getRandomPerson();
         db.collection('people').update(person, { age: 100 }).then(function(result) {
 
-            expect(result).toImplement(specHelper.updateResultInterface);
+            expect(result.result).toBeObject();
             expect(result.modifiedCount).toBe(1);
             person.age = 100;
             return db.collection('people').findOne(person);
 
         }).then(function(updatedPerson) {
 
-            expect(updatedPerson).toImplement(person);
+            expect(updatedPerson.age).toBe(100);
+            expect(updatedPerson.firstname).toBe(person.firstname);
+            expect(updatedPerson.lastname).toBe(person.lastname);
             done();
 
         });

@@ -8,7 +8,7 @@ describe('update options', function() {
 
             db.collection('people').update(query, updates, { upsert: true }).then(function(result) {
 
-                expect(result).toImplement(specHelper.updateResultInterface);
+                expect(result.result).toBeObject();
                 expect(result.modifiedCount).toBe(0);
                 expect(result.upsertedCount).toBe(1);
                 expect(result.upsertedId).toBeGreaterThan(0);
@@ -30,7 +30,7 @@ describe('update options', function() {
 
             db.collection('people').update(query, updates, { upsert: true }).then(function(result) {
 
-                expect(result).toImplement(specHelper.updateResultInterface);
+                expect(result.result).toBeObject();
                 expect(result.modifiedCount).toBeGreaterThan(0);
                 expect(result.upsertedCount).toBe(0);
                 expect(result.upsertedId).toBe(null);
