@@ -1,11 +1,13 @@
 var dexie = require('dexie');
-var has = require('has');
 var only = require('only');
 var assign = require('object-assign');
 var concat = require('array-concat');
 
 var utils = require('./utils');
 var noop = function noop() {};
+var has = function(obj, key) {
+  return obj.hasOwnProperty(key);
+};
 
 var comparsionQueryOperatorsImpl = {
 
