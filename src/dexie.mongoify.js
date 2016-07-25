@@ -8,7 +8,7 @@ var isArrayField = require('./utils/is-array-field');
 var isEmptyValue = require('./utils/is-empty-value');
 var isPlainValue = require('./utils/is-plain-value');
 var arraySlice = require('./utils/array-slice');
-var noop = require('./utils/noop')
+var noop = require('./utils/noop');
 var has = require('./utils/has');
 
 var comparsionQueryOperatorsImpl = {
