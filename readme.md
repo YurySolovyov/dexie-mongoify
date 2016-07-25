@@ -1,6 +1,6 @@
 ## Mongoify
 [![Codeship CI status](https://img.shields.io/codeship/cce4f940-a96b-0133-ca36-7a8c162db443.svg)](https://codeship.com/projects/130881)
-[![Deps](https://david-dm.org/YurySolovyov/Dexie-mongoify.svg)](https://david-dm.org/YurySolovyov/Dexie-mongoify)
+[![Deps](https://david-dm.org/YurySolovyov/dexie-mongoify.svg)](https://david-dm.org/YurySolovyov/dexie-mongoify)
 
 Mongoify is an addon for [Dexie.js](https://github.com/dfahlander/Dexie.js), IndexedDB wrapper.
 
