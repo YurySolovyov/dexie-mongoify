@@ -565,22 +565,23 @@ var createDeleteResult = function(deletedCount) {
 };
 
 var createUpsertModifier = function(table, query, update) {
-    return new dexie.Promise(function(resolve, reject) {
-        table.update(query, update).then(function(result) {
+    return new dexie.Promise(function(resolve) {
+        return table.update(query, update).then(function(result) {
             if (result.modifiedCount === 0) {
                 var newItem = createObjectForUpsert(query, update);
                 return table.insert(newItem);
             }
-            resolve(result);
+            return dexie.Promise.resolve(result);
         }).then(function(result) {
+            var finalResult = result;
             if (typeof result.insertedId === 'number') {
-                var updateResult = createUpdateResult(1, {
+                finalResult = createUpdateResult(1, {
                     isUpsert: true,
                     id: result.insertedId
                 });
-                resolve(updateResult);
             }
-        }).catch(reject);
+            return resolve(finalResult);
+        });
     });
 };
 

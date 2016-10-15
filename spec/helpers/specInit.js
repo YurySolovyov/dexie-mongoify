@@ -15,6 +15,6 @@ afterAll(function(done) {
     specHelper.dropDatabase(db, done);
 });
 
-Dexie.Promise.on('error', function(e) {
-    console.log(e.stack);
+window.addEventListener('unhandledrejection', function(e) {
+    console.log(e);
 });
