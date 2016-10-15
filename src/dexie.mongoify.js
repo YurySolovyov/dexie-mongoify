@@ -823,7 +823,14 @@ dexie.addons.push(function(db) {
         return performDrop(this);
     };
 
-    db.WriteableTable.prototype.update = function update(query, update, options) {
+    var WriteableTable;
+    if (db.WriteableTable) {
+        WriteableTable = db.WriteableTable;
+    } else {
+        WriteableTable = db.Table;
+    }
+
+    WriteableTable.prototype.update = function update(query, update, options) {
         var processedOptions = analyseUpdateOptions(options);
         return performCollectionUpdate(this, query, update, processedOptions);
     };
