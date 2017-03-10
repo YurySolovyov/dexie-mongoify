@@ -8,6 +8,6 @@
 
 [Remove API](/docs/remove-api.md)
 
-[Drop API](/docs/count-api.md)
+[Drop API](/docs/drop-api.md)
 
 [Top-level API](/docs/top-api.md)
