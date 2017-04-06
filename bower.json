@@ -1,0 +1,30 @@
+{
+  "name": "Dexie-mongoify",
+  "version": "1.2.0",
+  "authors": [
+    "YurySolovyov"
+  ],
+  "description": "Dexie.js plugin with MongoDB-like API",
+  "main": [
+    "dist/*.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YuriSolovyov/Dexie-mongoify"
+  },
+  "keywords": [
+    "mongo",
+    "indexeddb",
+    "dexie"
+  ],
+  "license": "MIT",
+  "homepage": "https://yurysolovyov.me/",
+  "ignore": [
+    "benchmarks",
+    "docs",
+    "spec"
+  ],
+  "dependencies": {
+    "dexie": "^1.4.1"
+  }
+}
