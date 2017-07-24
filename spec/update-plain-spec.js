@@ -61,4 +61,21 @@ describe('updating', function() {
 
     });
 
+    it('should update nested props', function(done) {
+        var person = specHelper.getRandomPerson();
+        db.collection('people').update(person, { 'deep.property': 0 }).then(function(result) {
+
+            expect(result.modifiedCount).toBe(1);
+            return db.collection('people').findOne(person);
+
+        }).then(function(updatedPerson) {
+            try {
+                expect(updatedPerson.deep.property).toBe(0);
+            } catch (e) {
+                fail();
+            }
+            done();
+        });
+    });
+
 });

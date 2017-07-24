@@ -10,6 +10,8 @@ var isPlainValue = require('./utils/is-plain-value');
 var arraySlice = require('./utils/array-slice');
 var noop = require('./utils/noop');
 var has = require('./utils/has');
+var dig = require('./utils/dig');
+var deepSet = require('./utils/deep-set');
 
 var comparsionQueryOperatorsImpl = {
 
@@ -314,6 +316,11 @@ var getMatcherSets = function(operator) {
     }).reduce(concat);
 };
 
+var maybeNestedPropertyUpdater = function(item, key, update) {
+    console.log(dig(item, key));
+    console.log({ item, key, update });
+};
+
 var getQueryValueMatchers = function(itemKey, queryOperators) {
     return Object.keys(queryOperators).map(function(operatorKey) {
         return getOperatorImplementation({
@@ -337,6 +344,7 @@ var createPlainPropertyUpdater = function(update, objectKeys) {
     var keys = objectKeys || Object.keys(update);
     return function(item) {
         keys.forEach(function(key) {
+            maybeNestedPropertyUpdater(item, key, update);
             if (has(item, key)) {
                 item[key] = update[key];
             }
