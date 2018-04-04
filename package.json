@@ -26,6 +26,7 @@
   "engines": {
     "node": ">= 4.2"
   },
+  "main": "src/dexie.mongoify.js",
   "dependencies": {
     "only": "^0.0.2",
     "object-assign": "^4.1.0",
