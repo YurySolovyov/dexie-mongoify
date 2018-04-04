@@ -791,6 +791,8 @@ var performDrop = function(table) {
     return table.toCollection().delete().then(createDeleteResult);
 };
 
+dexie = dexie.default || dexie;
+
 dexie.addons.push(function(db) {
 
     dexie.prototype.collection = function collection(collectionName) {
