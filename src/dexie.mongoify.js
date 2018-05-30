@@ -69,9 +69,13 @@ var comparsionQueryOperatorsImpl = {
 
     $all: function(key, value) {
         return function(item) {
-            return has(item, key) && value.every(function(valueItem) {
-                return item[key].indexOf(valueItem) > -1;
-            });
+           if (value.every) {
+               return has(item, key) && value.every(function(valueItem) {
+                   return item[key].indexOf(valueItem) > -1;
+               });
+            } else {
+                return has(item, key) && item[key].indexOf(value) > -1;
+            }
         };
     },
 
