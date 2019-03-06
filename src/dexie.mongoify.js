@@ -796,7 +796,7 @@ dexie = dexie.default || dexie;
 dexie.addons.push(function(db) {
 
     dexie.prototype.collection = function collection(collectionName) {
-        return db.table(collectionName);
+        return this.table(collectionName);
     };
 
     db.Table.prototype.count = function count(query) {
